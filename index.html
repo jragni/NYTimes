@@ -125,7 +125,7 @@
 
 var searchTerm = $("#searchTerm");
 var searchTermValue = $("#searchTerm").val();
-var numRecordsSelect = $("#searchTerm");	
+var numRecordsSelect = $("#numRecordsSelect");	
 var numRecordsSelectValue = numRecordsSelect.val();
 var startYear = $("#startYear")
 var startYearValue = startYear.value;
@@ -166,18 +166,44 @@ $("#runSearch").on("click", function(event)
 			// URL for the API that will be utilized in the application
 			var key = '2HnMUm3q4q4peJOxCeqhAALmJZP4zKmC'
 			var URL = "https://api.nytimes.com/svc/search/v2/articlesearch.json?";
- 
-			var queries = "q="+searchTermValue; //+ "&=" + startYearValue + "&end_date=" + endYearValue;
+			var queries = "q="+searchTermValue;
+			if (startYearValue != null)
+				{
+					queries += "&begin_date=" + startYearValue+'0101';
+				}
+			if(endYearValue !=null)
+				{
+					queries += "&end_date" + endYearValue +'1231';
+				}
 			var apiKey = " &api-key=" + key;
 			var queryURL = URL + queries + apiKey; 
-			console.log(searchTermValue);
 
 			$.ajax({
 				url: queryURL,
 				method: "GET"
-				}).then(function(response) 
+				}).then(function(data) 
 					{
-						console.log(response);
+
+					$("#wellSection").empty();
+					var info_retrieved =data.response.docs;
+					console.log(info_retrieved);
+						for(var i = 0; i<numRecordsSelectValue;i++)
+							{
+								var abstract = info_retrieved[i].abstract;
+								var authors = info_retrieved[i].byline.original;
+								var HL = info_retrieved[i].headline.print_headline;
+
+								var container = $("<div>");
+									container.html("<strong>"+HL+"</strong>"+"<br>"+"<em>"+authors+"</em>");
+									container.css("margin","25px");
+									container.css("background","slategray");
+									container.css("padding","25px");
+									container.css("color","white");
+
+
+							console.log(i);
+								$("#wellSection").append(container);
+							}
 		
 					});
 		}
