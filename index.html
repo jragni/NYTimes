@@ -173,7 +173,7 @@ $("#runSearch").on("click", function(event)
 				}
 			if(endYearValue !=null)
 				{
-					queries += "&end_date" + endYearValue +'1231';
+					queries += "&end_date=" + endYearValue +'1231';
 				}
 			var apiKey = " &api-key=" + key;
 			var queryURL = URL + queries + apiKey; 
